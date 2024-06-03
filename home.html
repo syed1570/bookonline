@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bookstore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #formContainer {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Online Bookstore</h1>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#books">Books</a>
+        <a href="#about">About Us</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <main>
+        <section id="home">
+            <h2>Welcome to Our Bookstore</h2>
+            <p>Welcome to Serene Pages, your go-to destination for a wide array of books that cater to every reader's taste. Whether you're a fiction fanatic, a non-fiction enthusiast, or someone who loves exploring niche genres, our carefully curated collection promises something special for everyone. Our online platform is designed with user-friendliness in mind, making it easy for you to browse, discover, and purchase your next great read from the comfort of your home.</p>
+
+<p>At Serene Pages, we believe in the power of stories to inspire, educate, and entertain. That’s why we not only stock bestsellers and new releases but also feature works from independent authors and small presses. Our dedicated team is passionate about books and is always on the lookout for hidden gems to add to our shelves. With detailed descriptions, reviews, and recommendations, we help you find books that match your interests and mood, ensuring a personalized shopping experience.</p>
+
+<p>Beyond being just a bookstore, Serene Pages is a community for book lovers. Join our online book clubs, participate in virtual author events, and connect with fellow readers through our forums and social media channels. We also offer a loyalty program that rewards you with points on every purchase, which you can redeem for discounts and special offers. Dive into the world of books with Serene Pages, where every page turns into a new adventure.</p>
+        </section>
+
+        <section id="books">
+            <h2>Our Books</h2>
+            <input type="text" id="searchInput" placeholder="Search for books..." onkeyup="searchBook()">
+            <table id="bookTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Genre</th>
+                        <th>Year</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="bookTableBody">
+                    <!-- Sample data rows will go here -->
+                </tbody>
+            </table>
+
+            <div id="formContainer" class="hidden">
+                <h2 id="formTitle">Add Book</h2>
+                <form id="bookForm" onsubmit="return saveBook()">
+                    <input type="hidden" id="bookIndex">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" required><br><br>
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" required><br><br>
+                    <label for="genre">Genre:</label>
+                    <input type="text" id="genre" required><br><br>
+                    <label for="year">Year:</label>
+                    <input type="number" id="year" required><br><br>
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="cancelEdit()">Cancel</button>
+                </form>
+            </div>
+
+            <button onclick="showAddForm()">Add Book</button>
+        </section>
+
+        <section id="about">
+            <h2>About Us</h2>
+            <p>We are an online bookstore dedicated to providing a wide range of books to our customers.</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions, please feel free to <a href="mailto:info@onlinebookstore.com">email us</a>.</p>
+        </section>
+    </main>
+    <footer>
+        &copy; 2024 Online Bookstore. All rights reserved.
+    </footer>
+
+    <script>
+       let books = [
+    { title: 'Echoes of Eternity', author: 'Ava Harper', genre: 'Fantasy', year: 2021 },
+    { title: 'Shadows in the Wind', author: 'Liam Bennett', genre: 'Mystery', year: 2019 },
+    { title: 'The Silent Voyage', author: 'Emma Collins', genre: 'Adventure', year: 2020 },
+    { title: 'Whispers of the Past', author: 'Olivia Carter', genre: 'Historical Fiction', year: 2022 },
+    { title: 'Crimson Horizons', author: 'Ethan Hayes', genre: 'Science Fiction', year: 2017 },
+    { title: 'Beneath the Willow', author: 'Sophia Clarke', genre: 'Romance', year: 2018 },
+    { title: 'Fragments of Reality', author: 'Noah Reynolds', genre: 'Philosophy', year: 2019 },
+    { title: 'The Forgotten Path', author: 'Isabella Moore', genre: 'Thriller', year: 2020 },
+    { title: 'Melodies of Life', author: 'James Walker', genre: 'Poetry', year: 2021 },
+    { title: 'Eclipsing Shadows', author: 'Mia Johnson', genre: 'Horror', year: 2022 },
+    { title: 'Canvas of Dreams', author: 'Lucas Young', genre: 'Drama', year: 2020 },
+    { title: 'The Quantum Paradox', author: 'Charlotte Evans', genre: 'Science', year: 2019 },
+    { title: 'Threads of Fate', author: 'Aiden Brooks', genre: 'Fantasy', year: 2018 },
+    { title: 'Veil of Secrets', author: 'Amelia Scott', genre: 'Mystery', year: 2020 },
+    { title: 'Rising Tides', author: 'Henry Martinez', genre: 'Adventure', year: 2021 },
+    { title: 'The Silent Guardian', author: 'Emily Adams', genre: 'Historical Fiction', year: 2017 },
+    { title: 'Nebula’s Embrace', author: 'Owen Thompson', genre: 'Science Fiction', year: 2022 },
+    { title: 'Hearts Entwined', author: 'Ella Green', genre: 'Romance', year: 2019 },
+    { title: 'Echoes of Philosophy', author: 'Alexander Baker', genre: 'Philosophy', year: 2020 },
+    { title: 'The Last Stand', author: 'Grace Turner', genre: 'Thriller', year: 2021 },
+    { title: 'Verses of Time', author: 'Daniel King', genre: 'Poetry', year: 2018 },
+    { title: 'Nightmare’s Edge', author: 'Lily Parker', genre: 'Horror', year: 2019 }
+];
+
+
+        function renderTable() {
+            const tbody = document.getElementById('bookTableBody');
+            tbody.innerHTML = '';
+            books.forEach((book, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.genre}</td>
+                    <td>${book.year}</td>
+                    <td>
+                        <button onclick="editBook(${index})">Edit</button>
+                        <button onclick="deleteBook(${index})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showAddForm() {
+            document.getElementById('formContainer').classList.remove('hidden');
+            document.getElementById('formTitle').innerText = 'Add Book';
+            document.getElementById('bookForm').reset();
+            document.getElementById('bookIndex').value = '';
+        }
+
+        function editBook(index) {
+            document.getElementById('formContainer').classList.remove('hidden');
+            document.getElementById('formTitle').innerText = 'Edit Book';
+            const book = books[index];
+            document.getElementById('title').value = book.title;
+            document.getElementById('author').value = book.author;
+            document.getElementById('genre').value = book.genre;
+            document.getElementById('year').value = book.year;
+            document.getElementById('bookIndex').value = index;
+        }
+
+        function saveBook() {
+            const index = document.getElementById('bookIndex').value;
+            const book = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                genre: document.getElementById('genre').value,
+                year: document.getElementById('year').value
+            };
+            if (index) {
+                books[index] = book;
+            } else {
+                books.push(book);
+            }
+            renderTable();
+            cancelEdit();
+            return false;
+        }
+
+        function deleteBook(index) {
+            books.splice(index, 1);
+            renderTable();
+        }
+
+        function cancelEdit() {
+            document.getElementById('formContainer').classList.add('hidden');
+        }
+
+        function searchBook() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tbody = document.getElementById('bookTableBody');
+            tbody.innerHTML = '';
+            books.filter(book => 
+                book.title.toLowerCase().includes(searchInput) || 
+                book.author.toLowerCase().includes(searchInput) || 
+                book.genre.toLowerCase().includes(searchInput) || 
+                book.year.toString().includes(searchInput)
+            ).forEach((book, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.genre}</td>
+                    <td>${book.year}</td>
+                    <td>
+                        <button onclick="editBook(${index})">Edit</button>
+                        <button onclick="deleteBook(${index})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
